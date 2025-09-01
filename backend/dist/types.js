@@ -1,0 +1,13 @@
+import { z } from "zod";
+const MAX_TOKEN = 1000;
+export const createChatType = z.object({
+    message: z.string().max(MAX_TOKEN),
+});
+export const createUser = z.object({
+    email: z.string().email(),
+});
+export const SigninType = z.object({
+    email: z.string().email(),
+    otp: z.string().min(4).max(6),
+});
+//# sourceMappingURL=types.js.map

@@ -7,3 +7,12 @@ export type Message = {
   content: string;
   role: string;
 };
+
+export const createUser = z.object({
+  email: z.string().email(),
+});
+
+export const SigninType = z.object({
+  email: z.string().email(),
+  otp: z.string().min(4).max(6),
+});
