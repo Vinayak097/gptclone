@@ -72,6 +72,7 @@ router.post("/signin", async (req, res) => {
       res.status(401).json({ message: "invalid otp" });
       return;
     }
+
     const token = jwt.sign({ userId: data.email }, process.env.JWT_SECRET!);
     res.status(200).json({ message: "signin success", token });
   } catch (e) {

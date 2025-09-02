@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
+import SideSlide from "./components/SideSlide";
+import Input from "./components/Input";
 
 export default function Home() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -133,8 +135,21 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-neutral-600">
+    <div className="relative bg-secondary h-screen flex  ">
+      <SideSlide></SideSlide>
+      <div className="flex-1  flex flex-col">
+        <nav className=" flex justify-between m-3 " >
+        <h1 className="px-4 py-2 bg-primary w-fit h-fit rounded-lg ">GptClone</h1>
+        <div className=" border-dotted">TF</div>
+      </nav>
+      <div className=" flex justify-center  items-center flex-1">
+        <Input></Input>
+      </div>
+      
 
+      </div>
+      
+      
     </div>
   );
 }

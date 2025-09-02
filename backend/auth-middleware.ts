@@ -1,6 +1,14 @@
 import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
-const authMiddleware = async (
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId: string;
+    }
+  }
+}
+export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -13,10 +21,12 @@ const authMiddleware = async (
       return;
     }
     const data = jwt.verify(token, process.env.JWT_SECRET!);
-    const userId=1
-    if(data.userId==userId){
-        
-    }
+    //find out what is the data is consoles
+
+    const userId = "1";
+    req.userId = userId;
+    console.log(data);
+
     next();
   } catch (e) {
     res.status(500).json({ message: "Internal server error" });
