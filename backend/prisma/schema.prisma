@@ -10,7 +10,7 @@ datasource db {
 
 model User {
   id             String         @id @default(uuid())
-  userId         String
+  email String @unique()
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   conversations  Conversation[]
@@ -20,10 +20,13 @@ model User {
 
 model Conversation {
   id        String    @id @default(uuid())
+  conversationId String 
   userId    String
+  title   String
   user      User      @relation(fields: [userId], references: [id])
   messages  Message[]
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
   @@map("conversations")
 }
 

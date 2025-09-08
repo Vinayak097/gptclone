@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsc &&node dist/index.js"
+    "dev": "tsc && xcopy generated dist\\generated /E /I /Y && node dist/index.js"
   },
   "keywords": [],
   "author": "",

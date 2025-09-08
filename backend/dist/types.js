@@ -1,6 +1,7 @@
 import { z } from "zod";
 const MAX_TOKEN = 1000;
 export const createChatType = z.object({
+    conversationId: z.string(),
     message: z.string().max(MAX_TOKEN),
 });
 export const createUser = z.object({

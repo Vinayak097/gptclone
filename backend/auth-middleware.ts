@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
 
 declare global {
@@ -15,18 +15,15 @@ export const authMiddleware = async (
 ) => {
   try {
     const token = req.headers.authorization?.split("Bearer ")[1];
-    console.log(req.headers["authorization"]);
+    console.log("token ", token);
     if (!token) {
       res.status(401).json({ message: "token not found" });
       return;
     }
-    const data = jwt.verify(token, process.env.JWT_SECRET!);
+    const data = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     //find out what is the data is consoles
-
-    const userId = "1";
-    req.userId = userId;
-    console.log(data);
-
+    req.userId = data.userId;
+    console.log("data ", data);
     next();
   } catch (e) {
     res.status(500).json({ message: "Internal server error" });

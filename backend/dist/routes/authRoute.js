@@ -1,11 +1,11 @@
 import e from "express";
 const router = e.Router();
 import { createUser, SigninType } from "../types.js";
-import { OpenAIRealtimeWebSocket } from "openai/beta/realtime/websocket.mjs";
 import emailjs from "@emailjs/nodejs";
 import jwt from "jsonwebtoken";
 import base32 from "hi-base32";
 import { TOTP } from "totp-generator";
+import client from "../dbclient.js";
 const publick_key = "LCeBX7ixMxLVRpO6K";
 const private_key = "V3Ov8_991grxil4p6mvT9";
 const service_id = "service_pqjiu8m";
@@ -27,8 +27,9 @@ async function sendOtpEmail(toEmail, otp) {
     }
 }
 const otpStore = new Map();
-function setOtp(otp, email) {
-    otpStore.set(email, otp);
+async function setOtp(otp, email) {
+    await otpStore.set(email, otp);
+    console.log(otpStore);
 }
 function deleteOpt(email) {
     const o = otpStore.get(email);
@@ -49,7 +50,7 @@ router.post("/init_signin", async (req, res) => {
         setTimeout(() => {
             deleteOpt(data.email);
         }, 60000);
-        await sendOtpEmail(data.email, otp);
+        // await sendOtpEmail(data.email, otp);
         res.status(200).json({ message: "email sended successfully" });
         return;
     }
@@ -67,12 +68,30 @@ router.post("/signin", async (req, res) => {
             return;
         }
         console.log(data.otp, otpStore);
-        if (data.otp != otpStore.get(data.email)) {
-            res.status(401).json({ message: "invalid otp" });
+        // if (data.otp != otpStore.get(data.email)) {
+        //   res.status(401).json({ message: "invalid otp" });
+        //   return;
+        // }
+        const userExist = await client.user.findFirst({
+            where: {
+                email: data.email,
+            },
+        });
+        console.log(userExist);
+        if (userExist) {
+            const token = jwt.sign({ userId: userExist.id }, process.env.JWT_SECRET);
+            res
+                .status(200)
+                .json({ message: "signin success", token, user: userExist });
             return;
         }
-        const token = jwt.sign({ userId: data.email }, process.env.JWT_SECRET);
-        res.status(200).json({ message: "signin success", token });
+        const user = await client.user.create({
+            data: {
+                email: data.email,
+            },
+        });
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+        res.status(200).json({ message: "signin success", token, user });
     }
     catch (e) {
         console.log("error in init singin", e);
