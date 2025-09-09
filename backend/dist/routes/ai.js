@@ -15,6 +15,7 @@ router.post("/", authMiddleware, async (req, res) => {
     const result = createChatType.safeParse(req.body);
     const userId = req.userId;
     const { success, data } = result;
+    let existConvesation = null;
     console.log(result.error, req.body);
     if (!success) {
         res.status(411).json({ message: "incorrect inputs" });
@@ -26,6 +27,20 @@ router.post("/", authMiddleware, async (req, res) => {
     let existingMessages = inMemoryStore
         .getInstance()
         .get(data.conversationId);
+    if (data.conversationId) {
+        existConvesation = await client.conversation.findUnique({
+            where: { conversationId: data.conversationId },
+        });
+    }
+    let conversationId = null;
+    if (!existConvesation) {
+        conversationId = randomUUID();
+        console.log("new ", conversationId);
+    }
+    if (conversationId) {
+        console.log("new ");
+        res.write(`convId: ${conversationId}\n\n`);
+    }
     await createCompletion("gpt-4", [...existingMessages, { role: "user", content: data.message }], (chunk) => {
         console.log(chunk, "chunk");
         responses += chunk;
@@ -37,12 +52,13 @@ router.post("/", authMiddleware, async (req, res) => {
     inMemoryStore
         .getInstance()
         .add(data.conversationId, { role: "assistant", content: responses });
-    if (!data.conversationId) {
-        console.log("creating ", userId);
-        let title = data.message;
-        await client.conversation.create({
+    if (!existConvesation) {
+        const title = data.message;
+        const conversation = await client.conversation.create({
             data: {
                 userId,
+                conversationId: conversationId || randomUUID(),
+                title,
                 messages: {
                     create: [
                         {
@@ -63,12 +79,12 @@ router.post("/", authMiddleware, async (req, res) => {
         await client.message.createMany({
             data: [
                 {
-                    conversationId: data.conversationId || randomUUID(),
+                    conversationId: existConvesation.id,
                     role: Role.user,
                     content: data.message,
                 },
                 {
-                    conversationId: data.conversationId || randomUUID(),
+                    conversationId: existConvesation.id,
                     role: Role.assistant,
                     content: responses,
                 },

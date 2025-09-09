@@ -2168,21 +2168,27 @@ export namespace Prisma {
 
   export type ConversationMinAggregateOutputType = {
     id: string | null
+    conversationId: string | null
     userId: string | null
+    title: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type ConversationMaxAggregateOutputType = {
     id: string | null
+    conversationId: string | null
     userId: string | null
+    title: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type ConversationCountAggregateOutputType = {
     id: number
+    conversationId: number
     userId: number
+    title: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2191,21 +2197,27 @@ export namespace Prisma {
 
   export type ConversationMinAggregateInputType = {
     id?: true
+    conversationId?: true
     userId?: true
+    title?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type ConversationMaxAggregateInputType = {
     id?: true
+    conversationId?: true
     userId?: true
+    title?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type ConversationCountAggregateInputType = {
     id?: true
+    conversationId?: true
     userId?: true
+    title?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2285,7 +2297,9 @@ export namespace Prisma {
 
   export type ConversationGroupByOutputType = {
     id: string
+    conversationId: string
     userId: string
+    title: string
     createdAt: Date
     updatedAt: Date
     _count: ConversationCountAggregateOutputType | null
@@ -2309,7 +2323,9 @@ export namespace Prisma {
 
   export type ConversationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    conversationId?: boolean
     userId?: boolean
+    title?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2319,7 +2335,9 @@ export namespace Prisma {
 
   export type ConversationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    conversationId?: boolean
     userId?: boolean
+    title?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2327,7 +2345,9 @@ export namespace Prisma {
 
   export type ConversationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    conversationId?: boolean
     userId?: boolean
+    title?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2335,12 +2355,14 @@ export namespace Prisma {
 
   export type ConversationSelectScalar = {
     id?: boolean
+    conversationId?: boolean
     userId?: boolean
+    title?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
+  export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "conversationId" | "userId" | "title" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
   export type ConversationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     messages?: boolean | Conversation$messagesArgs<ExtArgs>
@@ -2361,7 +2383,9 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      conversationId: string
       userId: string
+      title: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["conversation"]>
@@ -2790,7 +2814,9 @@ export namespace Prisma {
    */
   interface ConversationFieldRefs {
     readonly id: FieldRef<"Conversation", 'String'>
+    readonly conversationId: FieldRef<"Conversation", 'String'>
     readonly userId: FieldRef<"Conversation", 'String'>
+    readonly title: FieldRef<"Conversation", 'String'>
     readonly createdAt: FieldRef<"Conversation", 'DateTime'>
     readonly updatedAt: FieldRef<"Conversation", 'DateTime'>
   }
@@ -4328,7 +4354,9 @@ export namespace Prisma {
 
   export const ConversationScalarFieldEnum: {
     id: 'id',
+    conversationId: 'conversationId',
     userId: 'userId',
+    title: 'title',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -4469,7 +4497,9 @@ export namespace Prisma {
     OR?: ConversationWhereInput[]
     NOT?: ConversationWhereInput | ConversationWhereInput[]
     id?: StringFilter<"Conversation"> | string
+    conversationId?: StringFilter<"Conversation"> | string
     userId?: StringFilter<"Conversation"> | string
+    title?: StringFilter<"Conversation"> | string
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -4478,7 +4508,9 @@ export namespace Prisma {
 
   export type ConversationOrderByWithRelationInput = {
     id?: SortOrder
+    conversationId?: SortOrder
     userId?: SortOrder
+    title?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -4487,19 +4519,23 @@ export namespace Prisma {
 
   export type ConversationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    conversationId?: string
     AND?: ConversationWhereInput | ConversationWhereInput[]
     OR?: ConversationWhereInput[]
     NOT?: ConversationWhereInput | ConversationWhereInput[]
     userId?: StringFilter<"Conversation"> | string
+    title?: StringFilter<"Conversation"> | string
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     messages?: MessageListRelationFilter
-  }, "id">
+  }, "id" | "conversationId">
 
   export type ConversationOrderByWithAggregationInput = {
     id?: SortOrder
+    conversationId?: SortOrder
     userId?: SortOrder
+    title?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ConversationCountOrderByAggregateInput
@@ -4512,7 +4548,9 @@ export namespace Prisma {
     OR?: ConversationScalarWhereWithAggregatesInput[]
     NOT?: ConversationScalarWhereWithAggregatesInput | ConversationScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Conversation"> | string
+    conversationId?: StringWithAggregatesFilter<"Conversation"> | string
     userId?: StringWithAggregatesFilter<"Conversation"> | string
+    title?: StringWithAggregatesFilter<"Conversation"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
   }
@@ -4632,6 +4670,8 @@ export namespace Prisma {
 
   export type ConversationCreateInput = {
     id?: string
+    conversationId: string
+    title: string
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutConversationsInput
@@ -4640,7 +4680,9 @@ export namespace Prisma {
 
   export type ConversationUncheckedCreateInput = {
     id?: string
+    conversationId: string
     userId: string
+    title: string
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
@@ -4648,6 +4690,8 @@ export namespace Prisma {
 
   export type ConversationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutConversationsNestedInput
@@ -4656,7 +4700,9 @@ export namespace Prisma {
 
   export type ConversationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
@@ -4664,20 +4710,26 @@ export namespace Prisma {
 
   export type ConversationCreateManyInput = {
     id?: string
+    conversationId: string
     userId: string
+    title: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ConversationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConversationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4850,21 +4902,27 @@ export namespace Prisma {
 
   export type ConversationCountOrderByAggregateInput = {
     id?: SortOrder
+    conversationId?: SortOrder
     userId?: SortOrder
+    title?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type ConversationMaxOrderByAggregateInput = {
     id?: SortOrder
+    conversationId?: SortOrder
     userId?: SortOrder
+    title?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type ConversationMinOrderByAggregateInput = {
     id?: SortOrder
+    conversationId?: SortOrder
     userId?: SortOrder
+    title?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5090,6 +5148,8 @@ export namespace Prisma {
 
   export type ConversationCreateWithoutUserInput = {
     id?: string
+    conversationId: string
+    title: string
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageCreateNestedManyWithoutConversationInput
@@ -5097,6 +5157,8 @@ export namespace Prisma {
 
   export type ConversationUncheckedCreateWithoutUserInput = {
     id?: string
+    conversationId: string
+    title: string
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
@@ -5133,7 +5195,9 @@ export namespace Prisma {
     OR?: ConversationScalarWhereInput[]
     NOT?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
     id?: StringFilter<"Conversation"> | string
+    conversationId?: StringFilter<"Conversation"> | string
     userId?: StringFilter<"Conversation"> | string
+    title?: StringFilter<"Conversation"> | string
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
   }
@@ -5238,6 +5302,8 @@ export namespace Prisma {
 
   export type ConversationCreateWithoutMessagesInput = {
     id?: string
+    conversationId: string
+    title: string
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutConversationsInput
@@ -5245,7 +5311,9 @@ export namespace Prisma {
 
   export type ConversationUncheckedCreateWithoutMessagesInput = {
     id?: string
+    conversationId: string
     userId: string
+    title: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5268,6 +5336,8 @@ export namespace Prisma {
 
   export type ConversationUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutConversationsNestedInput
@@ -5275,19 +5345,25 @@ export namespace Prisma {
 
   export type ConversationUncheckedUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConversationCreateManyUserInput = {
     id?: string
+    conversationId: string
+    title: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ConversationUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUpdateManyWithoutConversationNestedInput
@@ -5295,6 +5371,8 @@ export namespace Prisma {
 
   export type ConversationUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
@@ -5302,6 +5380,8 @@ export namespace Prisma {
 
   export type ConversationUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

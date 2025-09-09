@@ -129,7 +129,9 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.ConversationScalarFieldEnum = {
   id: 'id',
+  conversationId: 'conversationId',
   userId: 'userId',
+  title: 'title',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

@@ -15,6 +15,7 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
   const result = createChatType.safeParse(req.body);
   const userId = req.userId;
   const { success, data } = result;
+  let existConvesation = null;
   console.log(result.error, req.body);
   if (!success) {
     res.status(411).json({ message: "incorrect inputs" });
@@ -28,6 +29,20 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
   let existingMessages: Message[] = inMemoryStore
     .getInstance()
     .get(data.conversationId);
+  if (data.conversationId) {
+    existConvesation = await client.conversation.findUnique({
+      where: { conversationId: data.conversationId },
+    });
+  }
+  let conversationId = null;
+  if (!existConvesation) {
+    conversationId = randomUUID();
+    console.log("new ", conversationId);
+  }
+  if (conversationId) {
+    console.log("new ");
+    res.write(`convId: ${conversationId}\n\n`);
+  }
 
   await createCompletion(
     "gpt-4",
@@ -46,12 +61,12 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
     .getInstance()
     .add(data.conversationId, { role: "assistant", content: responses });
 
-  if (!data.conversationId) {
-    console.log("creating ", userId);
+  if (!existConvesation) {
     const title = data.message;
-    await client.conversation.create({
+    const conversation = await client.conversation.create({
       data: {
         userId,
+        conversationId: conversationId || randomUUID(),
         title,
         messages: {
           create: [
@@ -72,12 +87,12 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
     await client.message.createMany({
       data: [
         {
-          conversationId: data.conversationId || randomUUID(),
+          conversationId: existConvesation.id,
           role: Role.user,
           content: data.message,
         },
         {
-          conversationId: data.conversationId || randomUUID(),
+          conversationId: existConvesation.id,
           role: Role.assistant,
           content: responses,
         },
