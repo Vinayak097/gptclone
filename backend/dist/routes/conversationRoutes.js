@@ -11,6 +11,7 @@ router.get("/", authMiddleware, async (req, res) => {
             },
             select: {
                 id: true,
+                title: true,
             },
         });
         res.status(200).json({ conversations });
