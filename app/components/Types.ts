@@ -3,11 +3,14 @@ export type Conversation = {
   messages: Message[];
 };
 export type Role = "user" | "assistant";
+
 export type Message = {
   role: Role;
   content: string;
-  id: string;
+  id?: string;
+  conversationId?: string | null;
 };
+
 export const demoConversations: Conversation[] = [
   {
     id: "conv1",

@@ -10,7 +10,7 @@ router.get("/", authMiddleware, async (req, res) => {
                 userId,
             },
             select: {
-                id: true,
+                conversationId: true,
                 title: true,
             },
         });
@@ -34,7 +34,7 @@ router.get("/:conversationId", authMiddleware, async (req, res) => {
         }
         const conversation = await client.conversation.findFirst({
             where: {
-                id: conversationId,
+                conversationId: conversationId,
                 userId,
             },
             include: {

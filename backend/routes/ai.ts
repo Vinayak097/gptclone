@@ -40,8 +40,7 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
     console.log("new ", conversationId);
   }
   if (conversationId) {
-    console.log("new ");
-    res.write(`convId: ${conversationId}\n\n`);
+    res.write(`event: convId\ndata: ${conversationId}\n\n`);
   }
 
   await createCompletion(
@@ -50,7 +49,7 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
     (chunk) => {
       console.log(chunk, "chunk");
       responses += chunk;
-      res.write(`data: ${chunk}\n\n`); // Send chunk as part of the stream
+      res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`); // Properly format as SSE
     }
   );
 
