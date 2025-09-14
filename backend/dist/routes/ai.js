@@ -13,6 +13,9 @@ var Role;
 })(Role || (Role = {}));
 router.post("/", authMiddleware, async (req, res) => {
     const result = createChatType.safeParse(req.body);
+    // await client.message.deleteMany();
+    // await client.conversation.deleteMany();
+    // console.log("deltete done");
     const userId = req.userId;
     const { success, data } = result;
     let existConvesation = null;
@@ -38,13 +41,12 @@ router.post("/", authMiddleware, async (req, res) => {
         console.log("new ", conversationId);
     }
     if (conversationId) {
-        console.log("new ");
-        res.write(`convId: ${conversationId}\n\n`);
+        res.write(`event: convId\ndata: ${conversationId}\n\n`);
     }
     await createCompletion("gpt-4", [...existingMessages, { role: "user", content: data.message }], (chunk) => {
         console.log(chunk, "chunk");
         responses += chunk;
-        res.write(`data: ${chunk}\n\n`); // Send chunk as part of the stream
+        res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`); // Properly format as SSE
     });
     inMemoryStore
         .getInstance()
@@ -75,16 +77,16 @@ router.post("/", authMiddleware, async (req, res) => {
         });
     }
     else {
-        console.log("creating message ");
+        console.log("creating message ", existConvesation);
         await client.message.createMany({
             data: [
                 {
-                    conversationId: existConvesation.id,
+                    conversationId: existConvesation.conversationId,
                     role: Role.user,
                     content: data.message,
                 },
                 {
-                    conversationId: existConvesation.id,
+                    conversationId: existConvesation.conversationId,
                     role: Role.assistant,
                     content: responses,
                 },

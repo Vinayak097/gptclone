@@ -2,6 +2,9 @@ import e from "express";
 import { authMiddleware } from "../auth-middleware.js";
 import client from "../dbclient.js";
 const router = e.Router();
+async function delteconvo() {
+    await client.conversation.deleteMany();
+}
 router.get("/", authMiddleware, async (req, res) => {
     const userId = req.userId;
     try {

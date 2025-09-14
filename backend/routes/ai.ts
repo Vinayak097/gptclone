@@ -13,6 +13,10 @@ enum Role {
 }
 router.post("/", authMiddleware, async (req: Request, res: Response) => {
   const result = createChatType.safeParse(req.body);
+  // await client.message.deleteMany();
+  // await client.conversation.deleteMany();
+
+  // console.log("deltete done");
   const userId = req.userId;
   const { success, data } = result;
   let existConvesation = null;
@@ -82,16 +86,16 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
       },
     });
   } else {
-    console.log("creating message ");
+    console.log("creating message ", existConvesation);
     await client.message.createMany({
       data: [
         {
-          conversationId: existConvesation.id,
+          conversationId: existConvesation.conversationId,
           role: Role.user,
           content: data.message,
         },
         {
-          conversationId: existConvesation.id,
+          conversationId: existConvesation.conversationId,
           role: Role.assistant,
           content: responses,
         },
