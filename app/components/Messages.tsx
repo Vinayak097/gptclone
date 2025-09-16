@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import messageStore from '@/store/messages.store';
 import { Message } from './Types';
+import { useMessage } from '@/hooks/useMessage';
 
 export enum Roles {
   user = 'user',
@@ -8,13 +9,12 @@ export enum Roles {
 }
 
 interface Props {
-  conversationId: string | null;
+  
+  messages:Message[]
 }
 
-const Messages = ({ conversationId }: Props) => {
-  const { messages } = messageStore();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
+const Messages = ({ messages}: Props) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);  
   // Auto-scroll to the latest message
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -22,10 +22,10 @@ const Messages = ({ conversationId }: Props) => {
     }
   }, [messages]);
 
+
   return (
     <div className="flex flex-col text-white space-y-4 p-4 overflow-auto h-full">
-      {messages
-        .filter((message) => message.conversationId === conversationId)
+      {messages && messages
         .map((message: Message, index: number) => (
           <div
             key={index}

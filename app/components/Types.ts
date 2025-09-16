@@ -7,8 +7,7 @@ export type Role = "user" | "assistant";
 export type Message = {
   role: Role;
   content: string;
-  id?: string;
-  conversationId?: string | null;
+  id: string;
 };
 
 export const demoConversations: Conversation[] = [

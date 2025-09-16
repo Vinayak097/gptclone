@@ -13,7 +13,7 @@ const Input = ({ chatApi, isLoading }: { chatApi: (message: string) => Promise<v
   };
 
   return (
-    <form onSubmit={handleSubmit} className='flex justify-between p-2 bg-neutral-800 rounded-full mx-2'>
+    <form onSubmit={handleSubmit} className='flex justify-between p-2 bg-third rounded-full  mb-2 max-w-3xl mx-auto'>
       <input 
         value={query} 
         onChange={(e) => setQuery(e.target.value)} 

@@ -4,47 +4,41 @@ import SideSlide from "./components/SideSlide";
 import Input from "./components/Input";
 import Messages, { Roles } from "./components/Messages";
 import messageStore from "@/store/messages.store";
-import useConversations from "@/utils/useConversation";
+import useConversations from "@/hooks/useConversation";
+import { useMessage } from "@/hooks/useMessage";
+import { Message } from "./components/Types";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [currentAssistantMessage, setCurrentAssistantMessage] = useState("");
-  const { messages, addMessage, setMessages } = messageStore();
-  const { data: conversations, isLoading: isLoadingConversations, mutate } = useConversations();
+  const [messages,setMessages]=useState<Message[]|[]>([])
+  
+  
 
-  // Load messages when conversation changes
-  useEffect(() => {
-    if (conversationId) {
-      loadConversationMessages(conversationId);
-    } else {
-      setMessages([]);
-    }
-  }, [conversationId]);
 
-  const loadConversationMessages = async (convId: string) => {
-    try {
-      const token = localStorage.getItem("token") || "your_fallback_token";
-      const response = await fetch(`http://localhost:3001/conversations/${convId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      
-      if (response.ok) {
-        const conversation = await response.json();
-        setMessages(conversation.messages || []);
-      }
-    } catch (error) {
-      console.error("Error loading conversation:", error);
+  const {data ,error , isLoading:convesationLoading} =useMessage(conversationId);
+  useEffect(()=>{
+    console.log("data  calling messages" , data)
+    if(Array.isArray(data)){
+      setMessages(data)
+    }else{
+      setMessages([])
     }
-  };
+    
+  },[data])
 
   const handleChat = async (userMessage: string) => {
-    if (!userMessage) return;
+    if (!userMessage.trim() || convesationLoading) return;
 
     // Add user message to the store
-    addMessage(userMessage, Roles.user, conversationId);
+    
+    let usermessage:Message={
+      role:Roles.user,
+      content:userMessage,
+      id:`user-${Date.now()}`
+    }
+    setMessages(prev=>[...prev,usermessage])
 
     // Call the API and handle streaming
     await callApi(userMessage);
@@ -53,9 +47,16 @@ export default function Home() {
   const callApi = async (userMessage: string) => {
     setIsLoading(true);
     setCurrentAssistantMessage("");
-    
+    let tempraryId=`assistant-${Date.now()}`
+    let assistanmessage:Message={
+      role:Roles.assistant,
+      content:"",
+      id:tempraryId
+    }
+
+    setMessages(prev=>[...prev,assistanmessage])
     try {
-      const token = localStorage.getItem("token") || "your_fallback_token";
+      const token = localStorage.getItem("token") ;
       const response = await fetch("http://localhost:3001/chat", {
         method: "POST",
         headers: {
@@ -66,6 +67,7 @@ export default function Home() {
       });
 
       if (!response.ok) {
+        console.log("responsoen not okay ")
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -97,7 +99,6 @@ export default function Home() {
               if (data === "[DONE]") {
                 // Finalize the assistant message
                 if (currentAssistantMessage) {
-                  addMessage(currentAssistantMessage, Roles.assistant, newConversationId);
                   setCurrentAssistantMessage("");
                 }
                 break;
@@ -105,7 +106,13 @@ export default function Home() {
                 try {
                   // Parse the JSON data
                   const parsedData = JSON.parse(data);
-                  setCurrentAssistantMessage(prev => prev + parsedData.content);
+                  setMessages(prev=>
+                    prev.map(m=>m.id==tempraryId?
+                      {...m,content:m.content+parsedData.content} :
+                      m
+                    )
+                  )
+                  
                 } catch (e) {
                   // If it's not JSON, treat as plain text
                   setCurrentAssistantMessage(prev => prev + data);
@@ -119,7 +126,7 @@ export default function Home() {
                   newConversationId = receivedConvId;
                   setConversationId(receivedConvId);
                   // Refresh conversations list
-                  mutate();
+                  
                 }
               }
             }
@@ -128,9 +135,11 @@ export default function Home() {
       }
     } catch (error: any) {
       console.error("Streaming error:", error);
-      addMessage("Error: Failed to get response", Roles.assistant, conversationId);
+      
     } finally {
       setIsLoading(false);
+      // addMessage(currentAssistantMessage ,Roles.assistant , conversationId)
+      
     }
   };
 
@@ -138,7 +147,8 @@ export default function Home() {
     setConversationId(null);
     setMessages([]);
   };
-
+  console.log("conversatin id changes " , conversationId)
+  console.log(currentAssistantMessage , 'asssitatent')
   return (
     <div className="bg-secondary h-screen flex">
       <SideSlide 
@@ -148,13 +158,13 @@ export default function Home() {
       />
       <div className="flex-1 flex flex-col">
         <nav className="bg-primary flex justify-between p-4">
-          <h1 className="text-white font-bold text-xl">GptClone</h1>
-          <div className="border-dotted text-white">TF</div>
+          <h1 className="text-white font-extralight text-md -tracking-wider">Promptly</h1>
+          <div className="border-dotted text-white text-sm ">TF</div>
         </nav>
 
         <div className="flex-grow overflow-hidden flex flex-col">
           <div className="flex-grow overflow-auto">
-            <Messages conversationId={conversationId} />
+            <Messages  messages={messages} />
             {/* Display current assistant message while streaming */}
             {isLoading && currentAssistantMessage && (
               <div className="flex justify-start p-4">
