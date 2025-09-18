@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+     "build": "prisma generate && tsc",
     "dev": "tsc && cp -r generated dist/generated && node dist/index.js"
 
   },
