@@ -1,8 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
+import type { User } from "./generated/prisma/index.js";
 declare global {
     namespace Express {
         interface Request {
             userId: string;
+            user: User;
         }
     }
 }

@@ -11,12 +11,13 @@ export const authMiddleware = async (req, res, next) => {
         const data = jwt.verify(token, process.env.JWT_SECRET);
         //find out what is the data is consoles
         const user = await client.user.findUnique({ where: { id: data.userId } });
-        console.log("user middlwaere ", user);
+        console.log("user middlwaere ", user, data);
         if (!user) {
             res.status(403).json({ message: "user not registered" });
             return;
         }
         req.userId = data.userId;
+        req.user = user;
         console.log("data ", data);
         next();
     }

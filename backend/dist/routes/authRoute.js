@@ -50,8 +50,8 @@ router.post("/init_signin", async (req, res) => {
         setTimeout(() => {
             deleteOpt(data.email);
         }, 60000);
-        // await sendOtpEmail(data.email, otp);
-        res.status(200).json({ message: "email sended successfully" });
+        await sendOtpEmail(data.email, otp);
+        res.status(200).json({ message: content });
         return;
     }
     catch (e) {
