@@ -7,12 +7,23 @@ import messageStore from "@/store/messages.store";
 import useConversations from "@/hooks/useConversation";
 import { useMessage } from "@/hooks/useMessage";
 import { Message } from "./components/Types";
+import Auth from "./components/Auth";
 
+import { backend_url } from "@/config";
+export interface User{
+    email:string,
+    id:string,
+    createdAt:string,
+    updatedAt:string
+}
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [currentAssistantMessage, setCurrentAssistantMessage] = useState("");
   const [messages,setMessages]=useState<Message[]|[]>([])
+  const [showauth, setShowAuth]=useState(false)
+  const [user ,setUser]=useState<null|User>(null)
+  
   
   
 
@@ -32,6 +43,10 @@ export default function Home() {
     if (!userMessage.trim() || convesationLoading) return;
 
     // Add user message to the store
+    if(!user){
+      setShowAuth(true)
+      return;
+    }
     
     let usermessage:Message={
       role:Roles.user,
@@ -57,6 +72,9 @@ export default function Home() {
     setMessages(prev=>[...prev,assistanmessage])
     try {
       const token = localStorage.getItem("token") ;
+      if(token){
+
+      }
       const response = await fetch("http://localhost:3001/chat", {
         method: "POST",
         headers: {
@@ -68,6 +86,9 @@ export default function Home() {
 
       if (!response.ok) {
         console.log("responsoen not okay ")
+        if(response.status==403){
+          setShowAuth(true)
+        }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -147,23 +168,51 @@ export default function Home() {
     setConversationId(null);
     setMessages([]);
   };
+  useEffect(()=>{
+    async function fetches() {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${backend_url}/user`, {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) {
+        return null;
+      } else {
+        const data = await res.json();
+        setUser(data.user);
+      }
+
+      return;
+    }
+    fetches()
+  },[])
+  
   console.log("conversatin id changes " , conversationId)
   console.log(currentAssistantMessage , 'asssitatent')
   return (
-    <div className="bg-secondary h-screen flex">
+    <div className=  " bg-secondary h-screen flex">
+      
+      
       <SideSlide 
         conversationID={conversationId} 
         setConversationId={setConversationId}
         onCreateNewChat={createNewChat}
       />
-      <div className="flex-1 flex flex-col">
+      <div className="relative flex-1 flex flex-col">
+        <div className="">
+          {showauth &&<Auth setUser={setUser} setShowAuth={setShowAuth } ></Auth>}
+      
+
+      </div>
         <nav className="bg-primary flex justify-between p-4">
           <h1 className="text-white font-extralight text-md -tracking-wider">Promptly</h1>
-          <div className="border-dotted text-white text-sm ">TF</div>
+          <div className="border-dotted text-white text-sm ">...</div>
         </nav>
 
         <div className="flex-grow overflow-hidden flex flex-col">
-          <div className="flex-grow overflow-auto">
+          <div className="flex-grow overflow-auto container mx-auto md:w-4xl">
             <Messages  messages={messages} />
             {/* Display current assistant message while streaming */}
             {isLoading && currentAssistantMessage && (
