@@ -9,7 +9,7 @@ type Model = "openai/gpt-4o" | "openai/gpt-5";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
 
 app.use(express.json());
 app.use("/user", userRoutes);

@@ -1,1 +1,1 @@
-export const backend_url = "http://localhost:3001";
+export const backend_url = "https://promptly-v0xg.onrender.com";
