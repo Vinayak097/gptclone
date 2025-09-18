@@ -19,6 +19,7 @@ async function sendOtpEmail(toEmail, otp) {
         const response = await emailjs.send(service_id, tempelate_id, {
             email: toEmail,
             message: `your login otp is ${otp}`,
+            subject: "promptly - regarding signin otp",
         });
         console.log("otp send to Email :", response.status, response.text);
     }
@@ -68,10 +69,10 @@ router.post("/signin", async (req, res) => {
             return;
         }
         console.log(data.otp, otpStore);
-        // if (data.otp != otpStore.get(data.email)) {
-        //   res.status(401).json({ message: "invalid otp" });
-        //   return;
-        // }
+        if (data.otp != otpStore.get(data.email)) {
+            res.status(401).json({ message: "invalid otp" });
+            return;
+        }
         const userExist = await client.user.findFirst({
             where: {
                 email: data.email,
