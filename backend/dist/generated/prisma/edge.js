@@ -155,6 +155,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -181,8 +185,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String         @id @default(uuid())\n  email         String         @unique()\n  createdAt     DateTime       @default(now())\n  updatedAt     DateTime       @updatedAt\n  conversations Conversation[]\n\n  @@map(\"users\")\n}\n\nmodel Conversation {\n  id             String    @id @default(uuid())\n  conversationId String    @unique\n  userId         String\n  title          String\n  user           User      @relation(fields: [userId], references: [id])\n  messages       Message[]\n  createdAt      DateTime  @default(now())\n  updatedAt      DateTime  @default(now())\n\n  @@map(\"conversations\")\n}\n\nmodel Message {\n  id             String       @id @default(uuid())\n  content        String\n  conversationId String\n  conversation   Conversation @relation(fields: [conversationId], references: [conversationId])\n  role           String\n  createdAt      DateTime     @default(now())\n  updatedAt      DateTime     @updatedAt\n}\n",
-  "inlineSchemaHash": "ca2e9742ea697f7cf1f469a2024c72eddb545d99b137555ff44c39487b3eda7f",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String         @id @default(uuid())\n  email         String         @unique()\n  createdAt     DateTime       @default(now())\n  updatedAt     DateTime       @updatedAt\n  conversations Conversation[]\n\n  @@map(\"users\")\n}\n\nmodel Conversation {\n  id             String    @id @default(uuid())\n  conversationId String    @unique\n  userId         String\n  title          String\n  user           User      @relation(fields: [userId], references: [id])\n  messages       Message[]\n  createdAt      DateTime  @default(now())\n  updatedAt      DateTime  @default(now())\n\n  @@map(\"conversations\")\n}\n\nmodel Message {\n  id             String       @id @default(uuid())\n  content        String\n  conversationId String\n  conversation   Conversation @relation(fields: [conversationId], references: [conversationId])\n  role           String\n  createdAt      DateTime     @default(now())\n  updatedAt      DateTime     @updatedAt\n}\n",
+  "inlineSchemaHash": "f3537829b64ad9ff8bb004ecf266da9bfe7b230d79dfbcb7c705e58b122387ae",
   "copyEngine": true
 }
 config.dirname = '/'

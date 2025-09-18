@@ -5,7 +5,7 @@ import authRoutes from "./routes/authRoute.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/chat", Ai);
