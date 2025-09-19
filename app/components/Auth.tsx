@@ -1,6 +1,6 @@
 import { backend_url } from '@/config';
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { User } from '../page';
 interface props{
@@ -37,7 +37,7 @@ const Auth = ({setShowAuth,setUser}:props) => {
       setStep(2);
       
       setResendCooldown(30); // 30s cooldown
-    } catch (err) {
+    } catch (err:any) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -56,9 +56,16 @@ const Auth = ({setShowAuth,setUser}:props) => {
       
       // redirect or show success
       
-    } catch (err) {
-        console.log(err , ' error from submit opt')
-      setError(err.response?.data?.message || "Invalid OTP");
+    }  catch (err) {
+  console.log(err, "error from submit opt");
+
+  if (err instanceof AxiosError) {
+    setError(err.response?.data?.message || "Invalid OTP");
+  } else if (err instanceof Error) {
+    setError(err.message);
+  } else {
+    setError("Something went wrong");
+  }
     } finally {
       setLoading(false);
     }

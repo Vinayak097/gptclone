@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import messageStore from '@/store/messages.store';
+import { useEffect, useRef } from 'react';
+
+
 import { Message } from './Types';
-import { useMessage } from '@/hooks/useMessage';
+
 
 export enum Roles {
   user = 'user',

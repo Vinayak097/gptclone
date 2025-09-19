@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import SideSlide from "./components/SideSlide";
 import Input from "./components/Input";
 import Messages, { Roles } from "./components/Messages";
-import messageStore from "@/store/messages.store";
-import useConversations from "@/hooks/useConversation";
+
 import { useMessage } from "@/hooks/useMessage";
 import { Message } from "./components/Types";
 import Auth from "./components/Auth";
@@ -28,7 +27,7 @@ export default function Home() {
   
 
 
-  const {data ,error , isLoading:convesationLoading} =useMessage(conversationId);
+  const {data , isLoading:convesationLoading} =useMessage(conversationId);
   useEffect(()=>{
     console.log("data  calling messages" , data)
     if(Array.isArray(data)){
@@ -48,7 +47,7 @@ export default function Home() {
       return;
     }
     
-    let usermessage:Message={
+    const usermessage:Message={
       role:Roles.user,
       content:userMessage,
       id:`user-${Date.now()}`
@@ -62,8 +61,8 @@ export default function Home() {
   const callApi = async (userMessage: string) => {
     setIsLoading(true);
     setCurrentAssistantMessage("");
-    let tempraryId=`assistant-${Date.now()}`
-    let assistanmessage:Message={
+    const tempraryId=`assistant-${Date.now()}`
+    const assistanmessage:Message={
       role:Roles.assistant,
       content:"",
       id:tempraryId
@@ -136,6 +135,7 @@ export default function Home() {
                   
                 } catch (e) {
                   // If it's not JSON, treat as plain text
+                  console.log(e)
                   setCurrentAssistantMessage(prev => prev + data);
                 }
               }
