@@ -16,7 +16,9 @@ app.use("/user", userRoutes);
 app.use("/chat", Ai);
 app.use("/auth", authRoutes);
 app.use("/conversations", conversationRoutes);
-
+app.get("/health", (req, res) => {
+  res.send("hello");
+});
 app.listen(3001, () => {
   console.log("port 3001");
 });
