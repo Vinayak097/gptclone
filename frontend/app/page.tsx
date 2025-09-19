@@ -74,7 +74,7 @@ export default function Home() {
       if(token){
 
       }
-      const response = await fetch("http://localhost:3001/chat", {
+      const response = await fetch(`${backend_url}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
