@@ -38,7 +38,7 @@ export default function Home() {
     
   },[data])
 
-  const handleChat = async (userMessage: string) => {
+  const handleChat = async (userMessage: string , model:string) => {
     if (!userMessage.trim() || convesationLoading) return;
 
     // Add user message to the store
@@ -55,10 +55,10 @@ export default function Home() {
     setMessages(prev=>[...prev,usermessage])
 
     // Call the API and handle streaming
-    await callApi(userMessage);
+    await callApi(userMessage,model);
   };
 
-  const callApi = async (userMessage: string) => {
+  const callApi = async (userMessage: string,model:string) => {
     setIsLoading(true);
     setCurrentAssistantMessage("");
     const tempraryId=`assistant-${Date.now()}`
@@ -80,7 +80,7 @@ export default function Home() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ message: userMessage, conversationId :conversationId||"" }),
+        body: JSON.stringify({ message: userMessage, conversationId :conversationId||"" , model }),
       });
 
       if (!response.ok) {

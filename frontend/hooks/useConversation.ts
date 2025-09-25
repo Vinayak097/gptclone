@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 export default function useConversations() {
   return useQuery({
     queryKey: ["conversation"],
-    queryFn: () => {
+    queryFn: async () => {
       return fetch(`${backend_url}/conversations`, {
         headers: {
           "Content-Type": "application/json",
