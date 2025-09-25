@@ -2,9 +2,11 @@ type Model =
   | "gpt-4o" // Latest, most capable
   | "gpt-4o-mini" // Fast and cheap
   | "gpt-4-turbo" // Previous generation
-  | "gpt-4" // Original GPT-4
   | "gpt-3.5-turbo"
-  | "openai/gpt-4o";
+  | "gpt-4o-mini-code"
+  | "gpt-3.5-turbo-16k"
+  | "gpt-4o-mini-code"
+  | "gpt-4o-code";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -138,16 +140,3 @@ export const createCompletion = async (
 };
 
 // Test function to help debug
-export const testCompletion = async () => {
-  const messages: Message[] = [{ role: "user", content: "Say hello world" }];
-
-  try {
-    await createCompletion("gpt-4", messages, (chunk) => {
-      console.log("CALLBACK RECEIVED:", chunk);
-      process.stdout.write(chunk);
-    });
-    console.log("\n✅ Test completed");
-  } catch (error) {
-    console.error("❌ Test failed:", error);
-  }
-};

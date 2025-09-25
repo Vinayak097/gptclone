@@ -2,12 +2,15 @@ import { z } from "zod";
 export declare const createChatType: z.ZodObject<{
     conversationId: z.ZodString;
     message: z.ZodString;
+    model: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     conversationId: string;
     message: string;
+    model: string;
 }, {
     conversationId: string;
     message: string;
+    model: string;
 }>;
 export type Message = {
     content: string;

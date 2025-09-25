@@ -107,17 +107,4 @@ export const createCompletion = async (model, message, cb) => {
     });
 };
 // Test function to help debug
-export const testCompletion = async () => {
-    const messages = [{ role: "user", content: "Say hello world" }];
-    try {
-        await createCompletion("gpt-4", messages, (chunk) => {
-            console.log("CALLBACK RECEIVED:", chunk);
-            process.stdout.write(chunk);
-        });
-        console.log("\n✅ Test completed");
-    }
-    catch (error) {
-        console.error("❌ Test failed:", error);
-    }
-};
 //# sourceMappingURL=openrouter.js.map

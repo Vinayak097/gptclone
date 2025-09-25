@@ -46,9 +46,10 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
   if (conversationId) {
     res.write(`event: convId\ndata: ${conversationId}\n\n`);
   }
+  const model = req.body.model;
 
   await createCompletion(
-    "gpt-4",
+    model,
     [...existingMessages, { role: "user", content: data.message }],
     (chunk) => {
       console.log(chunk, "chunk");

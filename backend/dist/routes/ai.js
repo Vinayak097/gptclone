@@ -43,7 +43,8 @@ router.post("/", authMiddleware, async (req, res) => {
     if (conversationId) {
         res.write(`event: convId\ndata: ${conversationId}\n\n`);
     }
-    await createCompletion("gpt-4", [...existingMessages, { role: "user", content: data.message }], (chunk) => {
+    const model = req.body.model;
+    await createCompletion(model, [...existingMessages, { role: "user", content: data.message }], (chunk) => {
         console.log(chunk, "chunk");
         responses += chunk;
         res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`); // Properly format as SSE

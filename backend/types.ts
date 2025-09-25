@@ -3,6 +3,7 @@ const MAX_TOKEN = 1000;
 export const createChatType = z.object({
   conversationId: z.string(),
   message: z.string().max(MAX_TOKEN).min(1),
+  model: z.string(),
 });
 export type Message = {
   content: string;
