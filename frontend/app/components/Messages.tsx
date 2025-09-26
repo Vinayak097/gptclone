@@ -25,7 +25,7 @@ const Messages = ({ messages}: Props) => {
 
 
   return (
-    <div className="flex flex-col text-white space-y-4 p-4 overflow-auto h-full">
+    <div className="flex flex-col text-white space-y-4 p-4  overflow-auto h-full">
       {messages && messages
         .map((message: Message, index: number) => (
           <div

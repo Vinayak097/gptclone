@@ -5,7 +5,16 @@
   --foreground: #171717;
   --primary:var(--primary)
 }
-
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* start hidden */
+  width: 250px;
+  height: 100%;
+  background: #333;
+  color: white;
+  transition: left 0.3s ease;
+}
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

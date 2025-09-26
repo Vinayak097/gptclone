@@ -5,7 +5,6 @@ import Ai from "./routes/ai.js";
 import authRoutes from "./routes/authRoute.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-type Model = "openai/gpt-4o" | "openai/gpt-5";
 
 const app = express();
 

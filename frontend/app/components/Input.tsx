@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { SendHorizontal } from 'lucide-react';
+import React, { Ref, useState } from 'react'
 type Model =
   | "gpt-4o" // Latest, most capable
   | "gpt-4o-mini" // Fast and cheap
@@ -21,7 +22,7 @@ type Model =
   { value: "gpt-3.5-turbo-16k", label: "GPT-3.5 Turbo 16k (Long context)" },
 ];
 
-const Input = ({ chatApi, isLoading }: { chatApi: (message: string) => Promise<void>, isLoading: boolean }) => {
+const Input = ({ chatApi, isLoading ,inputRef }: { chatApi: (message: string ,model:string) => Promise<void>, isLoading: boolean,inputRef:Ref<HTMLInputElement>,  }) => {
   const [query, setQuery] = useState("") 
   const [selectModel,setSelectedModel]=useState("gpt-4o");
   
@@ -34,16 +35,18 @@ const Input = ({ chatApi, isLoading }: { chatApi: (message: string) => Promise<v
   };
 
   return (
-    <form onSubmit={handleSubmit} className='flex justify-between p-2 bg-third rounded-full  mb-2 max-w-3xl mx-auto'>
-      <input 
+    <form onSubmit={handleSubmit} className='flex px-2 justify-between py-2 bg-third rounded-full  mb-2 max-w-3xl mx-auto'>
+      <input
+      ref={inputRef}
+      id='query' 
         value={query} 
         onChange={(e) => setQuery(e.target.value)} 
         type="text" 
         placeholder='Ask anything...'  
-        className='px-4 py-2 focus:outline-none flex-1 bg-transparent text-white'
+        className='px-4  focus:outline-none flex-1 bg-transparent text-white'
         disabled={isLoading}
       />
-      <select className='border border-neutral-500 w-fit mr-2 p-2 outline-none'
+      <select className='border w-20  border-neutral-500 text-sm rounded-2xl mr-1 p-1 md:mr-2 md:p-2 outline-none'
       id='model'
       name="model"
       value={selectModel}
@@ -60,9 +63,9 @@ const Input = ({ chatApi, isLoading }: { chatApi: (message: string) => Promise<v
       <button 
         type="submit"
         disabled={isLoading || !query.trim()}
-        className='cursor-pointer px-4 py-2 bg-blue-500 rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed'
+        className='cursor-pointer  rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed'
       >
-        {isLoading ? "Sending..." : "Send"}
+        {isLoading ? "L..." : <SendHorizontal />}
       </button>
     </form>
   )

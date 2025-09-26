@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SideSlide from "./components/SideSlide";
 import Input from "./components/Input";
 import Messages, { Roles } from "./components/Messages";
@@ -9,6 +9,8 @@ import { Message } from "./components/Types";
 import Auth from "./components/Auth";
 
 import { backend_url } from "@/config";
+import { PanelRight } from "lucide-react";
+import useMobile from "@/hooks/useMobile";
 export interface User{
     email:string,
     id:string,
@@ -22,6 +24,14 @@ export default function Home() {
   const [messages,setMessages]=useState<Message[]|[]>([])
   const [showauth, setShowAuth]=useState(false)
   const [user ,setUser]=useState<null|User>(null)
+  const [sideOpen , setsideOpen]=useState(false)
+  const inputref=useRef<HTMLInputElement|null>(null);
+  const isMobile=useMobile()
+  useEffect(()=>{
+    if(!isMobile){
+      setsideOpen(true)
+    }
+  } ,[])
   
   
   
@@ -40,20 +50,17 @@ export default function Home() {
 
   const handleChat = async (userMessage: string , model:string) => {
     if (!userMessage.trim() || convesationLoading) return;
-
     // Add user message to the store
     if(!user){
       setShowAuth(true)
       return;
     }
-    
     const usermessage:Message={
       role:Roles.user,
       content:userMessage,
       id:`user-${Date.now()}`
     }
     setMessages(prev=>[...prev,usermessage])
-
     // Call the API and handle streaming
     await callApi(userMessage,model);
   };
@@ -159,6 +166,7 @@ export default function Home() {
       
     } finally {
       setIsLoading(false);
+      inputref.current?.focus()
       // addMessage(currentAssistantMessage ,Roles.assistant , conversationId)
       
     }
@@ -188,26 +196,40 @@ export default function Home() {
     }
     fetches()
   },[])
-  
+  function handleSideOpen(){
+    setsideOpen(prev=>!prev);
+  }
   console.log("conversatin id changes " , conversationId)
   console.log(currentAssistantMessage , 'asssitatent')
   return (
-    <div className=  " bg-secondary h-screen flex">
-      
-      
+    <div className=  " bg-secondary h-screen flex relative ">
+       
       <SideSlide 
+        sideOpen={sideOpen}
+        setSideOpen={setsideOpen}
         conversationID={conversationId} 
         setConversationId={setConversationId}
         onCreateNewChat={createNewChat}
+        handleSideOpen={handleSideOpen}
       />
+      {isMobile && sideOpen 
+      && <div onClick={handleSideOpen} className="fixed inset-0 bg-black/50 z-40"></div>
+      }
+      
+      
       <div className="relative flex-1 flex flex-col">
-        <div className="">
+        <div className="">  
           {showauth &&<Auth setUser={setUser} setShowAuth={setShowAuth } ></Auth>}
       
 
       </div>
-        <nav className="bg-primary flex justify-between p-4">
+        <nav className="bg-primary flex justify-between p-4 ">
+          <div className=" flex items-center gap-4">
+            {!sideOpen &&<PanelRight onClick={handleSideOpen} />}
+          
           <h1 className="text-white font-extralight text-md -tracking-wider">Promptly</h1>
+          </div>
+          
           <div className="border-dotted text-white text-sm ">...</div>
         </nav>
 
@@ -223,8 +245,8 @@ export default function Home() {
               </div>
             )}
           </div>
-          <div className="p-4">
-            <Input chatApi={handleChat} isLoading={isLoading} />
+          <div className="p-2 ">
+            <Input inputRef={inputref} chatApi={handleChat} isLoading={isLoading} />
           </div>
         </div>
       </div>
